@@ -1,3 +1,5 @@
+const {limitList} = require("./home.js")
+
 function findAuthorById(authors, id) {
   return authors.find((author) => author.id == id)
 }
@@ -15,10 +17,23 @@ function partitionBooksByBorrowedStatus(books) {
 }
 
 function getBorrowersForBook(book, accounts) {
-  
-
-  
+  let result = []
+  accounts.forEach((account) => {
+    if (book.borrows.some((borrow) => borrow.id == account.id)){
+      const first = account
+      book.borrows.forEach((borrow) => {
+        if(borrow.id == account.id) {
+          let {returned} = borrow
+          const final = {...first, returned}
+          result.push(final)  
+        }
+      })
+    }
+  })
+  //call helper function from home.js to limit list to x amount
+  return limitList(result, 10)
 }
+
 
 module.exports = {
   findAuthorById,

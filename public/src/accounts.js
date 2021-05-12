@@ -19,8 +19,16 @@ function getTotalNumberOfBorrows(account, books) {
 
 function getBooksPossessedByAccount(account, books, authors) {
   
-
-  
+  let result = books.reduce((acc, book) => {
+    if (book.borrows[0].returned == false && book.borrows[0].id == account.id) {
+      const first = book
+      const author = authors.find((author) => author.id == book.authorId)
+      const final = {...first, author}
+      acc = final
+      return acc
+    }
+  })
+  return result
 }
 
 module.exports = {
