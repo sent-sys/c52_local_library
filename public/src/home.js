@@ -31,27 +31,25 @@ function getMostCommonGenres(books) {
 }
 
 function getMostPopularBooks(books) {
-  let result = []
-  books.forEach((book) => {
+  let result = books.reduce((acc, book) => {
     let name = book.title
     let count = book.borrows.length
-    let container = {name, count}
-    result.push({...container})    
-  })
+    acc.push({name, count})
+    return acc
+  }, [])
   result.sort((itemA, itemB) => itemB.count - itemA.count)
   return limitList(result, 5)
 }
 
 function getMostPopularAuthors(books, authors) {
-  let result = []
-  authors.forEach((author) => {
+  let result = authors.map((author) => {
     let name = `${author.name.first} ${author.name.last}`
     let count = 0
       books.forEach((book) => {
         if(book.authorId == author.id) count = book.borrows.length
       })
     let container = {name, count}
-    result.push({...container})
+    return {...container}
   })
   result.sort((itemA, itemB) => itemB.count - itemA.count)
   return limitList(result, 5)
